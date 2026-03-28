@@ -1,0 +1,146 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Playfair Display";
+  src: url("/assets/fonts/PlayfairDisplay.woff2") format("woff2");
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DM Sans";
+  src: url("/assets/fonts/DMSans.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    --radius: 0.625rem;
+    /* Dark Navy palette (always dark site) */
+    --background: 0.09 0.018 250;
+    --foreground: 0.96 0.005 250;
+    --card: 0.12 0.022 250;
+    --card-foreground: 0.96 0.005 250;
+    --popover: 0.14 0.022 250;
+    --popover-foreground: 0.96 0.005 250;
+    --primary: 0.75 0.12 75;
+    --primary-foreground: 0.09 0.018 250;
+    --secondary: 0.16 0.025 250;
+    --secondary-foreground: 0.96 0.005 250;
+    --muted: 0.16 0.025 250;
+    --muted-foreground: 0.72 0.02 240;
+    --accent: 0.88 0.14 85;
+    --accent-foreground: 0.09 0.018 250;
+    --destructive: 0.577 0.245 27.325;
+    --destructive-foreground: 0.985 0 0;
+    --border: 0.75 0.12 75 / 20%;
+    --input: 0.75 0.12 75 / 15%;
+    --ring: 0.75 0.12 75;
+    --gold: 0.75 0.12 75;
+    --gold-bright: 0.88 0.14 85;
+    --gold-glow: 0.72 0.15 75;
+    --navy-deep: 0.09 0.018 250;
+    --navy-mid: 0.12 0.022 250;
+    --navy-card: 0.14 0.025 252;
+    --chart-1: 0.75 0.12 75;
+    --chart-2: 0.6 0.118 184.704;
+    --chart-3: 0.88 0.14 85;
+    --chart-4: 0.627 0.265 303.9;
+    --chart-5: 0.645 0.246 16.439;
+    --sidebar: 0.12 0.022 250;
+    --sidebar-foreground: 0.96 0.005 250;
+    --sidebar-primary: 0.75 0.12 75;
+    --sidebar-primary-foreground: 0.09 0.018 250;
+    --sidebar-accent: 0.16 0.025 250;
+    --sidebar-accent-foreground: 0.96 0.005 250;
+    --sidebar-border: 0.75 0.12 75 / 20%;
+    --sidebar-ring: 0.75 0.12 75;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "DM Sans", sans-serif;
+    background: linear-gradient(
+      135deg,
+      oklch(0.09 0.018 250) 0%,
+      oklch(0.12 0.022 250) 100%
+    );
+    min-height: 100vh;
+  }
+}
+
+@layer utilities {
+  .font-serif {
+    font-family: "Playfair Display", serif;
+  }
+
+  .gold-gradient {
+    background: linear-gradient(
+      135deg,
+      oklch(0.75 0.12 75) 0%,
+      oklch(0.88 0.14 85) 100%
+    );
+  }
+
+  .gold-text {
+    background: linear-gradient(
+      135deg,
+      oklch(0.75 0.12 75) 0%,
+      oklch(0.88 0.14 85) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glass-card {
+    background: rgba(18, 24, 38, 0.65);
+    border: 1px solid oklch(0.75 0.12 75 / 0.2);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .gold-glow {
+    box-shadow: 0 0 20px oklch(0.75 0.12 75 / 0.3), 0 0 40px
+      oklch(0.75 0.12 75 / 0.15);
+  }
+
+  .gold-glow-hover:hover {
+    box-shadow: 0 0 30px oklch(0.75 0.12 75 / 0.45), 0 0 60px
+      oklch(0.75 0.12 75 / 0.2);
+  }
+
+  .fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .fade-in-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .section-divider {
+    border-top: 1px solid oklch(0.75 0.12 75 / 0.1);
+  }
+}
+
+@layer components {
+  .admin-input {
+    @apply bg-[oklch(0.14_0.022_250)] border-[oklch(0.75_0.12_75/0.2)] text-foreground placeholder:text-muted-foreground;
+  }
+}
