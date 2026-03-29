@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Footer from "../components/Footer";
-import LightningBackground from "../components/LightningBackground";
 import Navbar from "../components/Navbar";
 import PanelVideos from "../components/PanelVideos";
 import Products from "../components/Products";
@@ -11,8 +10,7 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<Tab>("BUY");
 
   return (
-    <div className="relative min-h-screen">
-      <LightningBackground />
+    <div className="relative min-h-screen" style={{ background: "#0a0a0f" }}>
       {/* Main content */}
       <div className="relative z-10">
         <Navbar onGetStarted={() => setActiveTab("BUY")} />
