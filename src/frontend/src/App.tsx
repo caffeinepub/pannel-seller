@@ -1,5 +1,6 @@
 import { Toaster } from "@/components/ui/sonner";
 import { useEffect, useState } from "react";
+import BackgroundMusic from "./components/BackgroundMusic";
 import Admin from "./pages/Admin";
 import Home from "./pages/Home";
 
@@ -17,6 +18,7 @@ export default function App() {
   return (
     <>
       {isAdmin ? <Admin /> : <Home />}
+      <BackgroundMusic />
       <Toaster richColors position="top-right" />
     </>
   );
