@@ -7,6 +7,9 @@ const proofImages = [
   "/assets/uploads/whatsapp_image_2026-03-28_at_10.01.21_pm-019d357f-b91a-7711-8049-871439aa797e-4.jpeg",
   "/assets/uploads/whatsapp_image_2026-03-28_at_10.01.26_pm-019d357f-bb22-75dc-a717-a28262ab797b-5.jpeg",
   "/assets/uploads/whatsapp_image_2026-03-28_at_10.00.01_pm-019d357f-bca3-709d-b1cd-9b26a22eef20-6.jpeg",
+  "/assets/uploads/whatsapp_image_2026-03-30_at_12.47.37_am_1-019d3b0f-cedc-77fc-b974-540a8ae62c7b-1.jpeg",
+  "/assets/uploads/whatsapp_image_2026-03-30_at_12.47.37_am-019d3b0f-cef4-720a-a68f-e8c3aeed4d5d-2.jpeg",
+  "/assets/uploads/whatsapp_image_2026-03-30_at_12.47.38_am-019d3b0f-cfce-73ec-b1c8-8cb0bff72dd7-3.jpeg",
 ];
 
 export default function Proofs() {

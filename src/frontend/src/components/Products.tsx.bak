@@ -5,6 +5,9 @@ import { useEffect, useRef, useState } from "react";
 const QR_IMAGE =
   "/assets/uploads/whatsapp_image_2026-03-28_at_10.34.21_pm-019d358d-f4fa-771b-b3e7-0bfd522ee61a-1.jpeg";
 
+const FREE_FIRE_LOGO =
+  "/assets/generated/free-fire-logo-transparent.dim_400x200.png";
+
 const TELEGRAM_ID = "Paanelseller";
 const TELEGRAM_URL = `https://t.me/${TELEGRAM_ID}`;
 
@@ -22,16 +25,6 @@ const NOOB_ID_PLANS = [
   { duration: "Lifetime", price: 700 },
 ];
 
-const IOS_PANNEL_PLANS = [
-  { duration: "7 Days", price: 350 },
-  { duration: "30 Days", price: 550 },
-  { duration: "60 Days", price: 700 },
-  { duration: "Lifetime", price: 999 },
-];
-
-const PREMIUM_PANNEL_PLANS = [
-  { duration: "ALL PANNELS LIFETIME", price: 1499 },
-];
 function QRModal({
   plan,
   price,
@@ -401,15 +394,27 @@ function PanelSection({
   plans,
   startIndex,
   onBuy,
+  showLogo,
 }: {
   title: string;
   plans: { duration: string; price: number }[];
   startIndex: number;
   onBuy: (plan: string, price: number) => void;
+  showLogo?: boolean;
 }) {
   return (
     <div className="mb-16">
       <div className="text-center mb-8">
+        {showLogo && (
+          <div className="fade-in-up flex justify-center mb-3">
+            <img
+              src={FREE_FIRE_LOGO}
+              alt="Free Fire"
+              className="h-20 md:h-24 object-contain drop-shadow-[0_0_20px_rgba(255,120,0,0.7)]"
+              style={{ filter: "drop-shadow(0 0 16px rgba(255,100,0,0.8))" }}
+            />
+          </div>
+        )}
         <p
           className="fade-in-up text-xs font-bold tracking-[0.3em] mb-2"
           style={{ color: "oklch(0.75 0.12 75)" }}
@@ -548,6 +553,7 @@ export default function Products() {
             title="MAIN ID PANNEL"
             plans={MAIN_ID_PLANS}
             startIndex={0}
+            showLogo
             onBuy={(plan, price) => setModal({ plan, price })}
           />
 
@@ -560,30 +566,6 @@ export default function Products() {
             title="NOOB ID PANNEL"
             plans={NOOB_ID_PLANS}
             startIndex={4}
-            onBuy={(plan, price) => setModal({ plan, price })}
-          />
-
-          <div
-            className="fade-in-up border-t my-4 mb-16"
-            style={{ borderColor: "oklch(0.75 0.12 75 / 0.2)" }}
-          />
-
-          <PanelSection
-            title="IOS PANNEL"
-            plans={IOS_PANNEL_PLANS}
-            startIndex={8}
-            onBuy={(plan, price) => setModal({ plan, price })}
-          />
-
-          <div
-            className="fade-in-up border-t my-4 mb-16"
-            style={{ borderColor: "oklch(0.75 0.12 75 / 0.2)" }}
-          />
-
-          <PanelSection
-            title="PREMIUM PANNEL"
-            plans={PREMIUM_PANNEL_PLANS}
-            startIndex={12}
             onBuy={(plan, price) => setModal({ plan, price })}
           />
 
