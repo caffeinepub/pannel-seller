@@ -544,6 +544,17 @@ export default function Products() {
             </div>
           </div>
 
+          <div className="flex justify-center mb-6">
+            <img
+              src="/assets/generated/freefire-logo-transparent.dim_400x200.png"
+              alt="Free Fire"
+              style={{
+                width: 220,
+                filter:
+                  "drop-shadow(0 0 18px rgba(255,120,0,0.7)) drop-shadow(0 0 6px rgba(255,60,0,0.5))",
+              }}
+            />
+          </div>
           <PanelSection
             title="MAIN ID PANNEL"
             plans={MAIN_ID_PLANS}
