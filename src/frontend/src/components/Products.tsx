@@ -32,6 +32,65 @@ const IOS_PANNEL_PLANS = [
 const PREMIUM_PANNEL_PLANS = [
   { duration: "ALL PANNELS LIFETIME", price: 1499 },
 ];
+
+type ButtonColorStyle = {
+  gradient: string;
+  glow: string;
+  textColor: string;
+  hoverGlow: string;
+};
+
+const BUTTON_STYLES: Record<string, ButtonColorStyle> = {
+  "MAIN ID PANNEL": {
+    gradient: "linear-gradient(135deg, #ff6a00, #ee0979)",
+    glow: "0 4px 20px rgba(238,9,121,0.5)",
+    textColor: "#fff",
+    hoverGlow: "0 6px 30px rgba(238,9,121,0.7)",
+  },
+  "NOOB ID PANNEL": {
+    gradient: "linear-gradient(135deg, #4776e6, #8e54e9)",
+    glow: "0 4px 20px rgba(142,84,233,0.5)",
+    textColor: "#fff",
+    hoverGlow: "0 6px 30px rgba(142,84,233,0.7)",
+  },
+  "IOS PANNEL": {
+    gradient: "linear-gradient(135deg, #00b4db, #0083b0)",
+    glow: "0 4px 20px rgba(0,180,219,0.5)",
+    textColor: "#fff",
+    hoverGlow: "0 6px 30px rgba(0,180,219,0.7)",
+  },
+  "PREMIUM PANNEL": {
+    gradient: "linear-gradient(135deg, #f7971e, #ffd200)",
+    glow: "0 4px 20px rgba(255,210,0,0.5)",
+    textColor: "#1a0a00",
+    hoverGlow: "0 6px 30px rgba(255,210,0,0.7)",
+  },
+};
+
+function playBuySound() {
+  try {
+    const ctx = new (
+      window.AudioContext || (window as any).webkitAudioContext
+    )();
+    const oscillator = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(ctx.destination);
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(880, ctx.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(
+      220,
+      ctx.currentTime + 0.15,
+    );
+    gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+    oscillator.start(ctx.currentTime);
+    oscillator.stop(ctx.currentTime + 0.15);
+  } catch {
+    // ignore audio errors
+  }
+}
+
 function QRModal({
   plan,
   price,
@@ -124,7 +183,6 @@ function QRModal({
               After payment, click below to submit your proof
             </p>
 
-            {/* I've Done Payment CTA */}
             <button
               type="button"
               data-ocid="payment.primary_button"
@@ -141,7 +199,6 @@ function QRModal({
               I've Done Payment ✓
             </button>
 
-            {/* Secondary Telegram button */}
             <a
               href={TELEGRAM_URL}
               target="_blank"
@@ -166,7 +223,6 @@ function QRModal({
           </>
         ) : (
           <>
-            {/* Back button */}
             <button
               type="button"
               data-ocid="payment.cancel_button"
@@ -177,7 +233,6 @@ function QRModal({
               <ArrowLeft className="w-4 h-4" />
             </button>
 
-            {/* Success header */}
             <div className="mb-5 pt-2">
               <div className="text-3xl mb-2">🎉</div>
               <h3
@@ -194,7 +249,6 @@ function QRModal({
               </p>
             </div>
 
-            {/* Upload Proof Section */}
             <div className="mb-4 text-left">
               <p
                 className="text-xs font-bold tracking-widest mb-2 text-center"
@@ -262,7 +316,6 @@ function QRModal({
               </p>
             </div>
 
-            {/* OR Separator */}
             <div className="flex items-center gap-3 my-4">
               <div
                 className="flex-1 h-px"
@@ -280,7 +333,6 @@ function QRModal({
               />
             </div>
 
-            {/* Direct DM on Telegram */}
             <p
               className="text-xs font-bold tracking-widest mb-3"
               style={{ color: "oklch(0.75 0.12 75)" }}
@@ -321,6 +373,7 @@ function PricingCard({
   featured,
   panelName,
   onBuy,
+  buttonColorStyle,
 }: {
   duration: string;
   price: number;
@@ -328,7 +381,10 @@ function PricingCard({
   featured?: boolean;
   panelName: string;
   onBuy: (plan: string, price: number) => void;
+  buttonColorStyle: ButtonColorStyle;
 }) {
+  const [hovered, setHovered] = useState(false);
+
   return (
     <div
       className="fade-in-up relative flex flex-col rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 gold-glow-hover"
@@ -386,12 +442,30 @@ function PricingCard({
         ))}
       </ul>
 
-      <Button
-        className="w-full gold-gradient text-[oklch(0.09_0.018_250)] font-bold tracking-wide rounded-full hover:shadow-gold-lg transition-all duration-300"
-        onClick={() => onBuy(`${panelName} - ${duration}`, price)}
+      <button
+        type="button"
+        data-ocid="buy.primary_button"
+        className="w-full py-3 px-4 rounded-full font-bold text-sm tracking-widest uppercase transition-all duration-300"
+        style={{
+          background: buttonColorStyle.gradient,
+          color: buttonColorStyle.textColor,
+          boxShadow: hovered
+            ? buttonColorStyle.hoverGlow
+            : buttonColorStyle.glow,
+          transform: hovered ? "scale(1.05)" : "scale(1)",
+          border: "none",
+          cursor: "pointer",
+          letterSpacing: "0.15em",
+        }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        onClick={() => {
+          playBuySound();
+          onBuy(`${panelName} - ${duration}`, price);
+        }}
       >
         BUY NOW
-      </Button>
+      </button>
     </div>
   );
 }
@@ -407,6 +481,9 @@ function PanelSection({
   startIndex: number;
   onBuy: (plan: string, price: number) => void;
 }) {
+  const buttonColorStyle =
+    BUTTON_STYLES[title] ?? BUTTON_STYLES["MAIN ID PANNEL"];
+
   return (
     <div className="mb-16">
       <div className="text-center mb-8">
@@ -433,6 +510,7 @@ function PanelSection({
             featured={plan.duration === "Lifetime"}
             panelName={title}
             onBuy={onBuy}
+            buttonColorStyle={buttonColorStyle}
           />
         ))}
       </div>
@@ -498,7 +576,6 @@ export default function Products() {
               Our <span className="gold-text">Panels</span>
             </h2>
 
-            {/* Google Verified Badge */}
             <div
               className="fade-in-up inline-flex items-center gap-2 mt-4 px-4 py-1.5 rounded-full"
               style={{
