@@ -67,6 +67,38 @@ const BUTTON_STYLES: Record<string, ButtonColorStyle> = {
   },
 };
 
+const BUY_BTN_STYLE_ID = "buy-btn-animations";
+
+function injectBuyBtnStyles() {
+  if (document.getElementById(BUY_BTN_STYLE_ID)) return;
+  const style = document.createElement("style");
+  style.id = BUY_BTN_STYLE_ID;
+  style.textContent = `
+    @keyframes floatBtn {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-5px) scale(1); }
+    }
+    @keyframes rgbGlow {
+      0%   { box-shadow: 0 0 18px 4px rgba(255,0,0,0.75), 0 4px 24px rgba(255,0,0,0.45); }
+      16%  { box-shadow: 0 0 18px 4px rgba(255,165,0,0.75), 0 4px 24px rgba(255,165,0,0.45); }
+      33%  { box-shadow: 0 0 18px 4px rgba(0,255,0,0.75), 0 4px 24px rgba(0,255,0,0.45); }
+      50%  { box-shadow: 0 0 18px 4px rgba(0,255,255,0.75), 0 4px 24px rgba(0,255,255,0.45); }
+      66%  { box-shadow: 0 0 18px 4px rgba(0,80,255,0.75), 0 4px 24px rgba(0,80,255,0.45); }
+      83%  { box-shadow: 0 0 18px 4px rgba(255,0,255,0.75), 0 4px 24px rgba(255,0,255,0.45); }
+      100% { box-shadow: 0 0 18px 4px rgba(255,0,0,0.75), 0 4px 24px rgba(255,0,0,0.45); }
+    }
+    [data-ocid="buy.primary_button"] {
+      animation: floatBtn 2s ease-in-out infinite, rgbGlow 3s linear infinite !important;
+    }
+    [data-ocid="buy.primary_button"]:hover {
+      animation: rgbGlow 1s linear infinite !important;
+      transform: translateY(-7px) scale(1.07) !important;
+      transition: transform 0.2s ease !important;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
 function playBuySound() {
   try {
     const ctx = new (
@@ -413,8 +445,6 @@ function PricingCard({
   onBuy: (plan: string, price: number) => void;
   buttonColorStyle: ButtonColorStyle;
 }) {
-  const [hovered, setHovered] = useState(false);
-
   return (
     <div
       className="fade-in-up relative flex flex-col rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 gold-glow-hover"
@@ -475,20 +505,14 @@ function PricingCard({
       <button
         type="button"
         data-ocid="buy.primary_button"
-        className="w-full py-3 px-4 rounded-full font-bold text-sm tracking-widest uppercase transition-all duration-300"
+        className="w-full py-3 px-4 rounded-full font-bold text-sm tracking-widest uppercase"
         style={{
           background: buttonColorStyle.gradient,
           color: buttonColorStyle.textColor,
-          boxShadow: hovered
-            ? buttonColorStyle.hoverGlow
-            : buttonColorStyle.glow,
-          transform: hovered ? "scale(1.05)" : "scale(1)",
           border: "none",
           cursor: "pointer",
           letterSpacing: "0.15em",
         }}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
         onClick={() => {
           playBuySound();
           onBuy(`${panelName} - ${duration}`, price);
@@ -553,6 +577,10 @@ export default function Products() {
   const [modal, setModal] = useState<{ plan: string; price: number } | null>(
     null,
   );
+
+  useEffect(() => {
+    injectBuyBtnStyles();
+  }, []);
 
   useEffect(() => {
     const el = ref.current;
