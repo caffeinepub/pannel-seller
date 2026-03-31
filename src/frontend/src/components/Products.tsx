@@ -91,6 +91,33 @@ function playBuySound() {
   }
 }
 
+function playCongratsSound() {
+  try {
+    const ctx = new (
+      window.AudioContext || (window as any).webkitAudioContext
+    )();
+    const notes = [523, 659, 784, 1047]; // C5, E5, G5, C6 - ascending major arpeggio
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.12);
+      gain.gain.setValueAtTime(0, ctx.currentTime + i * 0.12);
+      gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + i * 0.12 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(
+        0.001,
+        ctx.currentTime + i * 0.12 + 0.25,
+      );
+      osc.start(ctx.currentTime + i * 0.12);
+      osc.stop(ctx.currentTime + i * 0.12 + 0.3);
+    });
+  } catch {
+    // ignore audio errors
+  }
+}
+
 function QRModal({
   plan,
   price,
@@ -186,7 +213,10 @@ function QRModal({
             <button
               type="button"
               data-ocid="payment.primary_button"
-              onClick={() => setStep(2)}
+              onClick={() => {
+                playCongratsSound();
+                setStep(2);
+              }}
               className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-full font-bold text-sm tracking-wide transition-all duration-300 hover:scale-105 hover:shadow-lg mb-3"
               style={{
                 background:
